@@ -492,9 +492,24 @@ class IntegerSet
     from_i((1 << (last + 1)) - (1 << first))
   end
 
-  def bit2pos(bit_num)
-    return POS_TABLE[bit_num] if bit_num <= POS_KEY_MAX
-    BitCounter.count(bit_num - 1)
+  if 1.respond_to?(:bit_length)
+    # for Ruby >= 2.1
+
+    def bit2pos(bit_num) # :nodoc:
+      bit_num.bit_length - 1
+    end
+  else
+    POS_TABLE_SIZE = 1024
+    POS_KEY_MAX = 1 << (POS_TABLE_SIZE - 1)
+    POS_TABLE = {}
+    POS_TABLE_SIZE.times { |i| POS_TABLE[1 << i] = i }
+
+    private_constant :POS_TABLE_SIZE, :POS_KEY_MAX, :POS_TABLE
+
+    def bit2pos(bit_num) # :nodoc:
+      return POS_TABLE[bit_num] if bit_num <= POS_KEY_MAX
+      BitCounter.count(bit_num - 1)
+    end
   end
 
   private :bit2pos
@@ -509,12 +524,6 @@ class IntegerSet
 
   # class instance variable
   @maximum = 1_048_576
-  POS_TABLE_SIZE = 1024
-  POS_KEY_MAX = 1 << (POS_TABLE_SIZE - 1)
-  POS_TABLE = {}
-  POS_TABLE_SIZE.times { |i| POS_TABLE[1 << i] = i }
-
-  private_constant :POS_TABLE_SIZE, :POS_KEY_MAX, :POS_TABLE
 
   class << self
     attr_reader :maximum
