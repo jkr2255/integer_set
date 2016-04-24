@@ -128,7 +128,7 @@ class IntegerSet
   # Returns true if the set contains the given object.
   def include?(o)
     return false unless valid_member?(o)
-    (@val & (1 << o)) != 0
+    @val[o] != 0
   end
   alias member? include?
 
