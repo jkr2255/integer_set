@@ -357,7 +357,7 @@ class IntegerSet
   end
 
   def eql?(o)   # :nodoc:
-    o.is_a?(self.class) && @val.eql?(o.to_i)
+    o.instance_of?(self.class) && @val.eql?(o.to_i)
   end
 
   # Classifies the set by the return value of the given block and
