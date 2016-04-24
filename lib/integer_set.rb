@@ -478,6 +478,17 @@ class IntegerSet
     s
   end
 
+  # Create IntegerSet From Range
+  def self.from_range(range)
+    error = RangeError.new 'Unsuitable Range for IntegerSet#from_range'
+    first = range.first
+    last = range.last
+    raise error unless first.is_a?(Integer) && last.is_a?(Integer)
+    last -= 1 if range.exclude_end?
+    raise error if first < 0 || last < first
+    from_i((1 << (last + 1)) - (1 << first))
+  end
+
   def bit2pos(bit_num)
     return POS_TABLE[bit_num] if bit_num <= POS_KEY_MAX
     BitCounter.count(bit_num - 1)
