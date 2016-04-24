@@ -277,6 +277,7 @@ class IntegerSet
   # Merges the elements of the given enumerable object to the set and
   # returns self.
   def merge(enum)
+    enum = IntegerSet.from_range(enum) if enum.is_a?(Range)
     if enum.instance_of?(IntegerSet)
       @val |= enum.to_i
     else
@@ -483,9 +484,11 @@ class IntegerSet
     error = RangeError.new 'Unsuitable Range for IntegerSet#from_range'
     first = range.first
     last = range.last
+    # empty Range
+    return new if (first > last) || (range.exclude_end? && first == last)
     raise error unless first.is_a?(Integer) && last.is_a?(Integer)
     last -= 1 if range.exclude_end?
-    raise error if first < 0 || last < first
+    raise error if first < 0
     from_i((1 << (last + 1)) - (1 << first))
   end
 
