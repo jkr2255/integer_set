@@ -134,7 +134,7 @@ class IntegerSet
 
   # Returns true if the set is a superset of the given set.
   def superset?(set)
-    # TODO: IntegerSet specific implementation
+    return (~@val & set.to_i) == 0 if set.is_a?(IntegerSet)
     set.is_a?(Set) or raise ArgumentError, "value must be a set"
     return false if size < set.size
     set.all? { |o| include?(o) }
@@ -143,7 +143,7 @@ class IntegerSet
 
   # Returns true if the set is a proper superset of the given set.
   def proper_superset?(set)
-
+    return self != set && superset?(set) if set.is_a?(IntegerSet)
     set.is_a?(Set) or raise ArgumentError, "value must be a set"
     return false if size <= set.size
     set.all? { |o| include?(o) }
@@ -152,7 +152,7 @@ class IntegerSet
 
   # Returns true if the set is a subset of the given set.
   def subset?(set)
-
+    return (@val & ~set.to_i) == 0 if set.is_a?(IntegerSet)
     set.is_a?(Set) or raise ArgumentError, "value must be a set"
     return false if set.size < size
     all? { |o| set.include?(o) }
@@ -161,7 +161,7 @@ class IntegerSet
 
   # Returns true if the set is a proper subset of the given set.
   def proper_subset?(set)
-
+    return self != set && subset?(set) if set.is_a?(IntegerSet)
     set.is_a?(Set) or raise ArgumentError, "value must be a set"
     return false if set.size <= size
     all? { |o| set.include?(o) }
