@@ -110,8 +110,9 @@ class IntegerSet
   #
   # In subclasses, returns klass.new(self, *args, &block) unless
   # overridden.
-  def to_set(klass = Set, *args, &block)
-    # TODO:
+  def to_set(klass = IntegerSet, *args, &block)
+    return self if instance_of?(IntegerSet) && klass == IntegerSet && block.nil? && args.empty?
+    klass.new(self, *args, &block)
   end
 
   # Returns a new set that is a copy of the set.
