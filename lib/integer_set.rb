@@ -493,7 +493,7 @@ class IntegerSet
     from_i((1 << (last + 1)) - (1 << first))
   end
 
-  if 1.respond_to?(:bit_length)
+  if (2**1000).respond_to?(:bit_length)
     # for Ruby >= 2.1
 
     def bit2pos(bit_num) # :nodoc:
