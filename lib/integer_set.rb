@@ -17,6 +17,10 @@ require "integer_set/version"
 require 'bit_counter'
 require 'set'
 
+if defined?(JRUBY_VERSION)
+  require 'integer_set/jruby_bit_length'
+end
+
 #
 # Fast set consisting only of integers.
 # Interface is like Ruby-bundled set.
