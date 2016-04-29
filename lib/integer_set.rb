@@ -311,6 +311,10 @@ class IntegerSet
   # Returns a new set built by merging the set and the elements of the
   # given enumerable object.
   def |(enum)
+    if enum.is_a?(Set)
+      enum = try_integer_set(enum)
+      return enum.dup.merge(self) unless enum.is_a?(IntegerSet)
+    end
     dup.merge(enum)
   end
   alias + |             ##
@@ -460,6 +464,9 @@ class IntegerSet
 
   ##### original in IntegerSet
 
+  # error class for out of IntegerSet's range
+  class DomainError < RangeError; end
+
   def valid_member?(val)
     return false unless val.is_a?(Integer)
     val >= 0 && val <= self.class.maximum
@@ -468,7 +475,7 @@ class IntegerSet
   private :valid_member?
 
   def validate_member!(val)
-    raise ArgumentError, 'Out of range for IntegerSet' unless valid_member?(val)
+    raise DomainError, 'Out of range for IntegerSet' unless valid_member?(val)
   end
 
   private :validate_member!
@@ -490,7 +497,7 @@ class IntegerSet
 
   # Create IntegerSet From Range
   def self.from_range(range)
-    error = RangeError.new 'Unsuitable Range for IntegerSet#from_range'
+    error = DomainError.new 'Unsuitable Range for IntegerSet#from_range'
     first = range.first
     last = range.last
     # empty Range
@@ -508,6 +515,15 @@ class IntegerSet
   end
 
   alias kind_of? is_a?
+
+  def try_integer_set(set) #:nodoc:
+    return set if set.is_a?(IntegerSet)
+    raise TypeError unless set.is_a?(Set)
+    return set unless set.all? { |val| valid_member?(val) }
+    self.class.new set
+  end
+
+  private :try_integer_set
 
   # class instance variable
   @maximum = 1_048_576
