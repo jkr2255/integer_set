@@ -344,12 +344,12 @@ class IntegerSet
   # and the given enumerable object.  (set ^ enum) is equivalent to
   # ((set | enum) - (set & enum)).
   def ^(enum)
-    if enum.instance_of?(IntegerSet)
-      n = self.class.from_i(@val ^ enum.to_i)
-    else
-      n = Set.new(enum)
-      each { |o| if n.include?(o) then n.delete(o) else n.add(o) end }
+    if enum.is_a?(Set)
+      enum = try_integer_set(enum)
+      return enum.is_a?(IntegerSet) ? self.class.from_i(@val ^ enum.to_i) : enum ^ self
     end
+    n = IntegerSet.new(enum)
+    each { |o| if n.include?(o) then n.delete(o) else n.add(o) end }
     n
   end
 

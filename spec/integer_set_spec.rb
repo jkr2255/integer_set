@@ -709,4 +709,49 @@ describe IntegerSet do
     end
   end
 
+  describe '#^' do
+    it 'works well with other IntegerSet' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = IntegerSet[3, 5, 7].freeze
+      expect(s ^ t).to eq IntegerSet[1, 2, 5, 7]
+    end
+
+    it 'returns IntegerSet if Set content is in range' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = Set[3, 5, 7].freeze
+      ret = s ^ t
+      expect(ret).to be_a(IntegerSet)
+      expect(ret).to eq IntegerSet[1, 2, 5, 7]
+    end
+
+    it 'returns Set if Set is provided and content is out of range' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = Set[3, 5, 'hoge'].freeze
+      ret = s ^ t
+      expect(ret).to be_a(Set)
+      expect(ret).to eq Set[1, 2, 5, 'hoge']
+    end
+
+    it 'works well with proper Range' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = 3..6
+      ret = s ^ t
+      expect(ret).to be_a(IntegerSet)
+      expect(ret).to eq IntegerSet[1, 2, 4, 5, 6]
+    end
+
+    it 'raises IntegerSet::DomainError if out of range Range' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = -1..10
+      expect { s ^ t }.to raise_error IntegerSet::DomainError
+    end
+
+    it 'raises IntegerSet::DomainError if out of range Enumerable' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = %w|a b c|
+      expect { s ^ t }.to raise_error IntegerSet::DomainError
+    end
+  end
+
+
 end
