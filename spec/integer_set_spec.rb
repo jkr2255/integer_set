@@ -112,12 +112,12 @@ describe IntegerSet do
 
   describe '#to_set' do
     it 'returns self if no argument was given' do
-      s = IntegerSet[1, 9]
+      s = IntegerSet[1, 9].freeze
       expect(s.to_set).to be_equal(s)
     end
 
     it 'returns new Set if Set was given' do
-      s = IntegerSet[1, 9]
+      s = IntegerSet[1, 9].freeze
       expect(s.to_set(Set)).to eq(Set[1, 9])
     end
   end
@@ -140,13 +140,13 @@ describe IntegerSet do
 
   describe '#include?, #member?' do
     it 'returns true if value is in the set' do
-      s = IntegerSet[1, 3]
+      s = IntegerSet[1, 3].freeze
       expect(s.include?(1)).to be true
       expect(s.member?(1)).to be true
     end
 
     it 'returns false if value is not in the set (regardless value is in the range)' do
-      s = IntegerSet[1, 3]
+      s = IntegerSet[1, 3].freeze
       expect(s.include?(5)).to be false
       expect(s.include?('foo')).to be false
       expect(s.member?(5)).to be false
@@ -156,9 +156,9 @@ describe IntegerSet do
 
   describe '#superset?, #>=' do
     it 'returns true with proper superset' do
-      s = IntegerSet[1, 2, 3, 4]
-      t = IntegerSet[1, 2, 3]
-      u = Set[2, 3, 4]
+      s = IntegerSet[1, 2, 3, 4].freeze
+      t = IntegerSet[1, 2, 3].freeze
+      u = Set[2, 3, 4].freeze
       expect(s.superset?(t)).to be true
       expect(s).to be >= t
       expect(s.superset?(u)).to be true
@@ -175,9 +175,9 @@ describe IntegerSet do
     end
 
     it 'returns false with not superset' do
-      s = IntegerSet[1, 2, 3, 4]
-      t = IntegerSet[1, 3, 5]
-      u = Set[1, 3, 5]
+      s = IntegerSet[1, 2, 3, 4].freeze
+      t = IntegerSet[1, 3, 5].freeze
+      u = Set[1, 3, 5].freeze
       expect(s.superset?(t)).to be false
       expect(s).not_to be >= t
       expect(s.superset?(u)).to be false
@@ -185,7 +185,7 @@ describe IntegerSet do
     end
 
     it 'raises ArgumentError with other than Set' do
-      s = IntegerSet[1, 2, 3, 4]
+      s = IntegerSet[1, 2, 3, 4].freeze
       expect { s.superset?([1, 2]) }.to raise_error(ArgumentError)
       expect { s.superset?(3) }.to raise_error(ArgumentError)
       expect { s >= [1, 2] }.to raise_error(ArgumentError)
@@ -195,9 +195,9 @@ describe IntegerSet do
 
   describe '#proper_superset?, #>' do
     it 'returns true with proper superset' do
-      s = IntegerSet[1, 2, 3, 4]
-      t = IntegerSet[1, 2, 3]
-      u = Set[2, 3, 4]
+      s = IntegerSet[1, 2, 3, 4].freeze
+      t = IntegerSet[1, 2, 3].freeze
+      u = Set[2, 3, 4].freeze
       expect(s.proper_superset?(t)).to be true
       expect(s).to be > t
       expect(s.proper_superset?(u)).to be true
@@ -205,8 +205,8 @@ describe IntegerSet do
     end
 
     it 'returns false with the same set' do
-      s = IntegerSet[1, 2, 3, 4]
-      t = Set[1, 2, 3, 4]
+      s = IntegerSet[1, 2, 3, 4].freeze
+      t = Set[1, 2, 3, 4].freeze
       expect(s.proper_superset?(s)).to be false
       expect(s).not_to be > s
       expect(s.proper_superset?(t)).to be false
@@ -214,9 +214,9 @@ describe IntegerSet do
     end
 
     it 'returns false with not superset' do
-      s = IntegerSet[1, 2, 3, 4]
-      t = IntegerSet[1, 3, 5]
-      u = Set[1, 3, 5]
+      s = IntegerSet[1, 2, 3, 4].freeze
+      t = IntegerSet[1, 3, 5].freeze
+      u = Set[1, 3, 5].freeze
       expect(s.proper_superset?(t)).to be false
       expect(s).not_to be > t
       expect(s.proper_superset?(u)).to be false
@@ -224,7 +224,7 @@ describe IntegerSet do
     end
 
     it 'raises ArgumentError with other than Set' do
-      s = IntegerSet[1, 2, 3, 4]
+      s = IntegerSet[1, 2, 3, 4].freeze
       expect { s.proper_superset?([1, 2]) }.to raise_error(ArgumentError)
       expect { s.proper_superset?(3) }.to raise_error(ArgumentError)
       expect { s > [1, 2] }.to raise_error(ArgumentError)
@@ -234,9 +234,9 @@ describe IntegerSet do
 
   describe '#subset?, #<=' do
     it 'returns true with proper subset' do
-      s = IntegerSet[1, 2, 3]
-      t = IntegerSet[1, 2, 3, 4]
-      u = Set[1, 2, 3, 4]
+      s = IntegerSet[1, 2, 3].freeze
+      t = IntegerSet[1, 2, 3, 4].freeze
+      u = Set[1, 2, 3, 4].freeze
       expect(s.subset?(t)).to be true
       expect(s).to be <= t
       expect(s.subset?(u)).to be true
@@ -244,8 +244,8 @@ describe IntegerSet do
     end
 
     it 'returns true with the same set' do
-      s = IntegerSet[1, 2, 3, 4]
-      t = Set[1, 2, 3, 4]
+      s = IntegerSet[1, 2, 3, 4].freeze
+      t = Set[1, 2, 3, 4].freeze
       expect(s.subset?(s)).to be true
       expect(s).to be <= s
       expect(s.subset?(t)).to be true
@@ -253,9 +253,9 @@ describe IntegerSet do
     end
 
     it 'returns false with not subset' do
-      s = IntegerSet[1, 2, 3, 4]
-      t = IntegerSet[1, 3, 5]
-      u = Set[1, 3, 5]
+      s = IntegerSet[1, 2, 3, 4].freeze
+      t = IntegerSet[1, 3, 5].freeze
+      u = Set[1, 3, 5].freeze
       expect(s.subset?(t)).to be false
       expect(s).not_to be <= t
       expect(s.subset?(u)).to be false
@@ -263,7 +263,7 @@ describe IntegerSet do
     end
 
     it 'raises ArgumentError with other than Set' do
-      s = IntegerSet[1, 2, 3, 4]
+      s = IntegerSet[1, 2, 3, 4].freeze
       expect { s.subset?([1, 2]) }.to raise_error(ArgumentError)
       expect { s.subset?(3) }.to raise_error(ArgumentError)
       expect { s <= [1, 2] }.to raise_error(ArgumentError)
@@ -273,9 +273,9 @@ describe IntegerSet do
 
   describe '#proper_subset?, #<' do
     it 'returns true with proper subset' do
-      s = IntegerSet[1, 2, 3]
-      t = IntegerSet[1, 2, 3, 4]
-      u = Set[1, 2, 3, 4]
+      s = IntegerSet[1, 2, 3].freeze
+      t = IntegerSet[1, 2, 3, 4].freeze
+      u = Set[1, 2, 3, 4].freeze
       expect(s.proper_subset?(t)).to be true
       expect(s).to be < t
       expect(s.proper_subset?(u)).to be true
@@ -283,8 +283,8 @@ describe IntegerSet do
     end
 
     it 'returns false with the same set' do
-      s = IntegerSet[1, 2, 3, 4]
-      t = Set[1, 2, 3, 4]
+      s = IntegerSet[1, 2, 3, 4].freeze
+      t = Set[1, 2, 3, 4].freeze
       expect(s.proper_subset?(s)).to be false
       expect(s).not_to be < s
       expect(s.proper_subset?(t)).to be false
@@ -292,9 +292,9 @@ describe IntegerSet do
     end
 
     it 'returns false with not subset' do
-      s = IntegerSet[1, 2, 3, 4]
-      t = IntegerSet[1, 3, 5]
-      u = Set[1, 3, 5]
+      s = IntegerSet[1, 2, 3, 4].freeze
+      t = IntegerSet[1, 3, 5].freeze
+      u = Set[1, 3, 5].freeze
       expect(s.proper_subset?(t)).to be false
       expect(s).not_to be < t
       expect(s.proper_subset?(u)).to be false
@@ -302,7 +302,7 @@ describe IntegerSet do
     end
 
     it 'raises ArgumentError with other than Set' do
-      s = IntegerSet[1, 2, 3, 4]
+      s = IntegerSet[1, 2, 3, 4].freeze
       expect { s.proper_subset?([1, 2]) }.to raise_error(ArgumentError)
       expect { s.proper_subset?(3) }.to raise_error(ArgumentError)
       expect { s < [1, 2] }.to raise_error(ArgumentError)
@@ -312,23 +312,23 @@ describe IntegerSet do
 
   describe '#intersect?' do
     it 'returns true if one item is shared' do
-      s = IntegerSet[1, 2, 3]
-      t = IntegerSet[3, 4, 5]
-      u = Set[2, 6, 10]
+      s = IntegerSet[1, 2, 3].freeze
+      t = IntegerSet[3, 4, 5].freeze
+      u = Set[2, 6, 10].freeze
       expect(s).to be_intersect(t)
       expect(s).to be_intersect(u)
     end
 
     it 'returns false if no item is shared' do
-      s = IntegerSet[1, 2, 3]
-      t = IntegerSet[4, 5, 6]
-      u = Set[7, 8, 9]
+      s = IntegerSet[1, 2, 3].freeze
+      t = IntegerSet[4, 5, 6].freeze
+      u = Set[7, 8, 9].freeze
       expect(s).not_to be_intersect(t)
       expect(s).not_to be_intersect(u)
     end
 
     it 'raises ArgumentError if other than Set is specified' do
-      s = IntegerSet[1, 2, 3]
+      s = IntegerSet[1, 2, 3].freeze
       expect { s.intersect?([1, 2]) }.to raise_error(ArgumentError)
       expect { s.intersect?(3) }.to raise_error(ArgumentError)
     end
@@ -336,23 +336,23 @@ describe IntegerSet do
 
   describe '#disjoint?' do
     it 'returns false if one item is shared' do
-      s = IntegerSet[1, 2, 3]
-      t = IntegerSet[3, 4, 5]
-      u = Set[2, 6, 10]
+      s = IntegerSet[1, 2, 3].freeze
+      t = IntegerSet[3, 4, 5].freeze
+      u = Set[2, 6, 10].freeze
       expect(s).not_to be_disjoint(t)
       expect(s).not_to be_disjoint(u)
     end
 
     it 'returns true if no item is shared' do
-      s = IntegerSet[1, 2, 3]
-      t = IntegerSet[4, 5, 6]
-      u = Set[7, 8, 9]
+      s = IntegerSet[1, 2, 3].freeze
+      t = IntegerSet[4, 5, 6].freeze
+      u = Set[7, 8, 9].freeze
       expect(s).to be_disjoint(t)
       expect(s).to be_disjoint(u)
     end
 
     it 'raises ArgumentError if other than Set is specified' do
-      s = IntegerSet[1, 2, 3]
+      s = IntegerSet[1, 2, 3].freeze
       expect { s.disjoint?([1, 2]) }.to raise_error(ArgumentError)
       expect { s.disjoint?(3) }.to raise_error(ArgumentError)
     end
@@ -360,7 +360,7 @@ describe IntegerSet do
 
   describe '#each' do
     it 'returns Enumerator if block is not given' do
-      s = IntegerSet[1, 2, 3]
+      s = IntegerSet[1, 2, 3].freeze
       expect(s.each).to be_a(Enumerator)
     end
 
