@@ -753,5 +753,44 @@ describe IntegerSet do
     end
   end
 
+  describe '#==' do
+    it 'returns true if the content is equal' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = s.dup
+      expect(s).to be == t
+    end
+
+    it 'returns true with Set' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = Set[1, 2, 3].freeze
+      expect(s).to be == t
+      expect(t).to be == s
+    end
+
+    it 'returns false with Enumerable at same range' do
+      s = IntegerSet[1, 2, 3].freeze
+      expect(s).not_to be == [1, 2, 3]
+      expect(s).not_to be == (1..3)
+    end
+  end
+
+  describe '#classify' do
+    it 'returns Enumerator if block was not given' do
+      s = IntegerSet[1, 2, 3]
+      expect(s.classify).to be_a Enumerator
+    end
+
+    it 'divides IntegerSet into IntegerSets by block value' do
+      s = IntegerSet.from_range(1..10)
+      ret = s.classify { |i| i % 3 }
+      expected = {
+        0 => IntegerSet[3, 6, 9],
+        1 => IntegerSet[1, 4, 7, 10],
+        2 => IntegerSet[2, 5, 8]
+      }
+      expect(ret).to eq expected
+      expect(ret.each_value.all? { |e| e.is_a?(IntegerSet) }).to be true
+    end
+  end
 
 end
