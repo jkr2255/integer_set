@@ -447,7 +447,7 @@ class IntegerSet
 
 
   # Returns a string containing a human-readable representation of the
-  # set. ("#<Set: {element1, element2, ...}>")
+  # set. ("#<IntegerSet: {element1, element2, ...}>")
   def inspect
     sprintf('#<%s: {%s}>', self.class, to_a.inspect[1..-2])
   end
