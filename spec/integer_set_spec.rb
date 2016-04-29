@@ -617,7 +617,23 @@ describe IntegerSet do
     end
 
     it 'works well with proper Range' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = 3..6
+      ret = s | t
+      expect(ret).to be_a(IntegerSet)
+      expect(ret).to eq IntegerSet[1, 2, 3, 4, 5, 6]
+    end
 
+    it 'raises IntegerSet::DomainError if out of range Range' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = -1..10
+      expect { s | t }.to raise_error IntegerSet::DomainError
+    end
+
+    it 'raises IntegerSet::DomainError if out of range Enumerable' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = %w|a b c|
+      expect { s | t }.to raise_error IntegerSet::DomainError
     end
   end
 
