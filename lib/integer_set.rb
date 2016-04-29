@@ -18,7 +18,11 @@ require 'bit_counter'
 require 'set'
 
 if defined?(JRUBY_VERSION)
+  # Calling Java is faster than pure Ruby (backports)
   require 'integer_set/jruby_bit_length'
+else
+  require 'backports/2.1.0/fixnum/bit_length'
+  require 'backports/2.1.0/bignum/bit_length'
 end
 
 #
@@ -101,7 +105,7 @@ class IntegerSet
     arr = []
     while unchecked > 0
       bit = unchecked & -unchecked
-      pos = bit2pos(bit)
+      pos = bit.bit_length - 1
       arr << (pos + shift)
       unchecked >>= (pos + 1)
       shift += pos + 1
@@ -496,28 +500,6 @@ class IntegerSet
     raise error if first < 0
     from_i((1 << (last + 1)) - (1 << first))
   end
-
-  if (2**1000).respond_to?(:bit_length)
-    # for Ruby >= 2.1
-
-    def bit2pos(bit_num) # :nodoc:
-      bit_num.bit_length - 1
-    end
-  else
-    POS_TABLE_SIZE = 1024
-    POS_KEY_MAX = 1 << (POS_TABLE_SIZE - 1)
-    POS_TABLE = {}
-    POS_TABLE_SIZE.times { |i| POS_TABLE[1 << i] = i }
-
-    private_constant :POS_TABLE_SIZE, :POS_KEY_MAX, :POS_TABLE
-
-    def bit2pos(bit_num) # :nodoc:
-      return POS_TABLE[bit_num] if bit_num <= POS_KEY_MAX
-      BitCounter.count(bit_num - 1)
-    end
-  end
-
-  private :bit2pos
 
   # pretending to be a Set
   def is_a?(klass)
