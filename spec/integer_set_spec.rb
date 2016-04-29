@@ -637,4 +637,40 @@ describe IntegerSet do
     end
   end
 
+  describe '#-' do
+    it 'works well with other IntegerSet' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = IntegerSet[3, 5, 7].freeze
+      expect(s - t).to eq IntegerSet[1, 2]
+    end
+
+    it 'works well with other Set' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = Set[3, 5, 7, 'foo'].freeze
+      ret = s - t
+      expect(ret).to be_a(IntegerSet)
+      expect(ret).to eq IntegerSet[1, 2]
+    end
+
+    it 'works well with proper Range' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = 3..6
+      ret = s - t
+      expect(ret).to be_a(IntegerSet)
+      expect(ret).to eq IntegerSet[1, 2]
+    end
+
+    it 'works well with partially out of Range' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = -1..1
+      expect(s - t).to eq IntegerSet[2, 3]
+    end
+
+    it 'does nothing with out-of-range Enumerable' do
+      s = IntegerSet[1, 2, 3].freeze
+      t = %w|a b c|
+      expect(s - t).to eq s
+    end
+  end
+
 end
