@@ -817,5 +817,27 @@ describe IntegerSet do
     end
   end
 
+  describe '.from_range' do
+    it 'generates empty IntegerSet if Range is empty' do
+      expect(IntegerSet.from_range(1..0)).to eq IntegerSet.new
+      expect(IntegerSet.from_range(1...1)).to eq IntegerSet.new
+      expect(IntegerSet.from_range('z'..'a')).to eq IntegerSet.new
+      expect(IntegerSet.from_range('a'...'a')).to eq IntegerSet.new
+    end
+
+    it 'raises IntegerSet::DomainError for non-Integer Range' do
+      expect { IntegerSet.from_range('a'..'c') }.to raise_error IntegerSet::DomainError
+      expect { IntegerSet.from_range(1.0..3.0) }.to raise_error IntegerSet::DomainError
+    end
+
+    it 'raises IntegerSet::DomainError for negative Integer Range' do
+      expect { IntegerSet.from_range(-1..1) }.to raise_error IntegerSet::DomainError
+    end
+
+    it 'generates IntegerSet from proper Range' do
+      expect(IntegerSet.from_range(1..5)).to eq IntegerSet[1, 2, 3, 4, 5]
+    end
+
+  end
 
 end
