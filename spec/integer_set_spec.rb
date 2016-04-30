@@ -793,4 +793,29 @@ describe IntegerSet do
     end
   end
 
+  describe '#to_i' do
+    it 'returns Integer with member corresponding to bit position' do
+      expect(IntegerSet.new.to_i).to eq 0
+      s = IntegerSet[1, 100]
+      expect(s.to_i).to eq((1 << 100) + 2)
+    end
+  end
+
+  describe '.from_i' do
+    it 'generates IntegerSet from Integer' do
+      expect(IntegerSet.from_i(0)).to eq IntegerSet.new
+      expect(IntegerSet.from_i((1 << 100) + 2)).to eq IntegerSet[1, 100]
+    end
+
+    it 'raises TypeError if non-Integer is passed' do
+      expect { IntegerSet.from_i(0.0) }.to raise_error TypeError
+      expect { IntegerSet.from_i('foo') }.to raise_error TypeError
+    end
+
+    it 'raises ArgumentError if negative value is passed' do
+      expect { IntegerSet.from_i(-1) }.to raise_error ArgumentError
+    end
+  end
+
+
 end
