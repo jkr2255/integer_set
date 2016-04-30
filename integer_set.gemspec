@@ -9,9 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Jkr2255"]
   spec.email         = ["magnesium.oxide.play@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Fast Set, whose member is restricted to positive integer.}
+  spec.homepage      = 'https://github.com/jkr2255/integer_set'
   spec.licenses      = %w|Ruby BSD-2-Clause|
 
 
